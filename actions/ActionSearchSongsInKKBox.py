@@ -69,12 +69,12 @@ def search_singer_album(intent: str, pattern: re) -> FlexSendMessage or TextSend
     # 搜尋歌手資訊
     search_result = search_artist_albums(token=kkbox_access_token, artist_name=singer_name)['data']
 
-    if search_result is None or len(search_result) < 1:
-        return TextSendMessage(text='很抱歉，搜尋不到您輸入的歌手，要不要換一個試試看。')
-
     # 資料過濾
     # 避免出現跟使用搜尋跟歌手不相關的專輯
     search_result = list(filter(lambda singer: singer_name in singer['artist']['name'], search_result))
+
+    if search_result is None or len(search_result) < 1:
+        return TextSendMessage(text='很抱歉，搜尋不到您輸入的歌手，要不要換一個試試看。')
 
     # Flex 樣板 LINE 目前限制只能放 12 個 Bubble Message
     if len(search_result) > BUBBLE_MESSAGE_LIMIT:
@@ -102,12 +102,12 @@ def search_singer_song(intent: str, pattern: re) -> FlexSendMessage or TextSendM
     # 搜尋歌手資訊
     search_result = search_artist_tracks(token=kkbox_access_token, artist_name=singer_name)['data']
 
-    if search_result is None or len(search_result) < 1:
-        return TextSendMessage(text='很抱歉，搜尋不到您輸入的歌手，要不要換一個試試看。')
-
     # 資料過濾
     # 避免出現跟使用搜尋跟歌手不相關的的歌曲
     search_result = list(filter(lambda singer: singer_name in singer['album']['artist']['name'], search_result))
+
+    if search_result is None or len(search_result) < 1:
+        return TextSendMessage(text='很抱歉，搜尋不到您輸入的歌手，要不要換一個試試看。')
 
     # Flex 樣板 LINE 目前限制只能放 12 個 Bubble Message
     if len(search_result) > BUBBLE_MESSAGE_LIMIT:
