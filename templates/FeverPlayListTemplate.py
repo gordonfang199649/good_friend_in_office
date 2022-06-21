@@ -2,7 +2,7 @@ from linebot.models import (
     FlexSendMessage
 )
 
-from actions.templates.KKBoxWidget import KKBoxWidget, WidgetType, Territory, Language, AutoPlay, LOOP
+from templates.KKBoxWidget import KKBoxWidget, WidgetType, Territory, Language, AutoPlay, LOOP
 
 """
     產製發燒流行播放清單模板

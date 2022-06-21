@@ -2,11 +2,11 @@ import logging as LOGGER
 import random
 import re
 from linebot.models import (FlexSendMessage, TextSendMessage)
-from actions.templates.AlbumTemplate import album_template
-from actions.templates.ChartTemplate import chart_template
-from actions.templates.FeverPlayListTemplate import fever_playlist_template
-from actions.templates.SingerSummaryTemplate import singer_template
-from actions.templates.SongTemplate import track_template
+from templates.AlbumTemplate import album_template
+from templates.ChartTemplate import chart_template
+from templates.FeverPlayListTemplate import fever_playlist_template
+from templates.SingerSummaryTemplate import singer_template
+from templates.SongTemplate import track_template
 from agents.KKBox import (
     get_access_token, search_artists, search_artist_albums, search_artist_tracks, search_tracks, search_albums,
     get_new_hits, list_charts)
