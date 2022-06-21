@@ -12,6 +12,8 @@ def track_template(search_result: list) -> FlexSendMessage:
     contents = dict()
     contents['type'] = 'carousel'
     bubbles = []
+
+    artist_name = search_result[0]['album']['artist']['name']
     for track_data in search_result:
         # 產生 KKBOX HTML Widgets URL
         widget = KKBoxWidget()
@@ -158,7 +160,7 @@ def track_template(search_result: list) -> FlexSendMessage:
                         "type": "button",
                         "action": {
                             "type": "uri",
-                            "label": "聆聽專輯",
+                            "label": "聆聽單曲",
                             "uri": widget_url
                         },
                         "style": "primary",
@@ -168,4 +170,4 @@ def track_template(search_result: list) -> FlexSendMessage:
             }
         })
     contents['contents'] = bubbles
-    return FlexSendMessage(alt_text='shop name', contents=contents)
+    return FlexSendMessage(alt_text=f'歌手{artist_name}歌單', contents=contents)

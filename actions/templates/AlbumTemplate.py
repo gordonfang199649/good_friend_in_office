@@ -12,6 +12,7 @@ def album_template(search_result: list) -> FlexSendMessage:
     contents = dict()
     contents['type'] = 'carousel'
     bubbles = []
+    artist_name = search_result[0]['artist']['name']
     for album_data in search_result:
         # 產生 KKBOX HTML Widgets URL
         widget = KKBoxWidget()
@@ -150,4 +151,4 @@ def album_template(search_result: list) -> FlexSendMessage:
             }
         })
     contents['contents'] = bubbles
-    return FlexSendMessage(alt_text='shop name', contents=contents)
+    return FlexSendMessage(alt_text=f'歌手{artist_name}專輯', contents=contents)
