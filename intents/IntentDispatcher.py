@@ -1,5 +1,6 @@
 import importlib
 import sys
+import traceback
 
 from linebot.models import TextSendMessage
 import config.Logger
@@ -31,6 +32,7 @@ def dispatch(intent: str):
             try:
                 return getattr(sys.modules[action[0]], action[1])(intent=intent, pattern=pattern)
             except Exception as e:
+                traceback.print_exc()
                 LOGGER.error(e)
                 return TextSendMessage(text='很抱歉，服務異常，請聯絡開發人員。')
 

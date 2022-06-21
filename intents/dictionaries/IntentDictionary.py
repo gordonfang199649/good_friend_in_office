@@ -8,5 +8,6 @@ patterns = {
     re.compile('.*[搜尋|搜|找]專輯(.*)'): ['actions.ActionSearchSongsInKKBox', 'search_possible_albums'],
     re.compile('.*[搜尋|搜|找][歌曲|歌](.*)'): ['actions.ActionSearchSongsInKKBox', 'search_possible_songs'],
     re.compile('.*流行音樂.*'): ['actions.ActionSearchSongsInKKBox', 'list_fever_playlists'],
-    re.compile('.*排行榜.*'): ['actions.ActionSearchSongsInKKBox', 'view_charts']
+    re.compile('.*排行榜.*'): ['actions.ActionSearchSongsInKKBox', 'view_charts'],
+    re.compile('.*梗圖.*'): ['actions.ActionMemePictures', 'get_meme_picture']
 }
