@@ -88,15 +88,15 @@ def search_artist_tracks(token: KKBOXAccessToken, artist_name: str):
 """
     搜尋 KKBOX 歌曲
     :param token : API access token
-    :param track_name : 歌曲關鍵字
+    :param track_keyword : 歌曲關鍵字
     :return 符合關鍵字的歌曲
 """
-def search_tracks(token: KKBOXAccessToken, track_name: str):
+def search_tracks(token: KKBOXAccessToken, track_keyword: str):
     kkbox_api = KKBOXAPI(token)
 
     # 目前只開放搜尋台灣的歌曲
     search_results = kkbox_api.search_fetcher.search(
-        track_name,
+        track_keyword,
         types=[KKBOXSearchTypes.TRACK],
         terr=KKBOXTerritory.TAIWAN)
 
