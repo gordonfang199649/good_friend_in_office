@@ -10,7 +10,8 @@ patterns = {
     re.compile('.*排行榜.*'): ['actions.ActionSearchSongsInKKBox', 'view_charts'],
     re.compile('.*多.*梗圖.*'): ['actions.ActionMemePictures', 'get_more_meme_picture'],
     re.compile('.*梗圖.*'): ['actions.ActionMemePictures', 'get_meme_picture'],
-    re.compile('.*運勢.*'): ['actions.ActionZodiac', 'get_today_fortune'],
-    re.compile('[名言|金句|名言金句]'): ['actions.ActionReadMotto', 'read_motto'],
-    re.compile('.*[間諜|間諜家族|阿妮亞].*'): ['actions.ActionShowImgurImages', 'send_spy_family_images']
+    re.compile('.*[問|知道]星座運勢'): ['actions.ActionZodiac', 'ask_users_zodiac_sign'],
+    re.compile('^.{2}座$'): ['actions.ActionZodiac', 'get_today_fortune'],
+    re.compile('(名言|金句|名言金句)'): ['actions.ActionReadMotto', 'read_motto'],
+    re.compile('.*(間諜|間諜家族|阿妮亞).*'): ['actions.ActionShowImgurImages', 'send_spy_family_images']
 }
