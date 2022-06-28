@@ -1,5 +1,4 @@
 import logging as LOGGER
-
 from flask import Flask, request, abort
 from linebot import (
     LineBotApi, WebhookHandler
@@ -12,7 +11,10 @@ from linebot.models import (
 )
 
 from common.LoadEnvVariable import CHANNEL_ACCESS_TOKEN, CHANNEL_SECRET
-from intents.IntentDispatcher import dispatch
+from domains.DomainDispatcher import dispatch
+from models.Message import Message
+from models.UserContext import UserContext
+from utils.MessageCache import cache
 
 """
     configurations
@@ -25,7 +27,7 @@ LOGGER.getLogger(__name__)
 line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(CHANNEL_SECRET)
 app = Flask(__name__)
-
+message_cache = cache
 """
     call back function
 """
@@ -55,15 +57,19 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    LOGGER.info(f'Line 使用者傳送訊息: {event.message.text}')
-    try:
-        profile = line_bot_api.get_profile(event.source.user_id)
-        LOGGER.info(f'Line 使用者 ID: {profile.user_id}')
-        LOGGER.info(f'Line 使用者顯示名稱: {profile.display_name}')
-    except Exception as e:
-        LOGGER.info(f'使用者 {event.source.user_id} 目前不是好友')
+    LOGGER.debug(f'Line 使用者傳送訊息: {event.message.text}')
 
-    reply_message = dispatch(intent=event.message.text)
+    message = Message()
+    message.original_message = event.message.text
+    if event.source.user_id not in message_cache.keys():
+        message_cache[event.source.user_id] = []
+    message_cache[event.source.user_id].insert(0, message)
+
+    user_context = UserContext()
+    user_context.user_id = event.source.user_id
+    user_context.message = message
+    reply_message = dispatch(user_context=user_context)
+
     if reply_message is not None:
         line_bot_api.reply_message(event.reply_token, reply_message)
 

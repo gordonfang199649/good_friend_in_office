@@ -8,23 +8,23 @@ from linebot.models import TextSendMessage, QuickReply, QuickReplyButton, Messag
 from common.LoadEnvVariable import SIGN_ZODIAC_URL, ARIES_PICTURE, TAURUS_PICTURE, GEMINI_PICTURE, CANCER_PICTURE, \
     LEO_PICTURE, VIRGO_PICTURE, LIBRA_PICTURE, SCORPIO_PICTURE, SAGITTARIUS_PICTURE, CAPRICORN_PICTURE, \
     AQUARIUS_PICTURE, PISCES_PICTURE
-from messages.MessageZodiacReply import reply_zodiac_not_exists, reply_question
+from messages.MessageZodiacReply import reply_zodiac_not_exists, reply_question, reply_yes_or_no_question
 from templates.TodayFortuneTemplate import today_fortune_template
 
 # 星座轉換字典
 zodiacSigns_convert = {
-    re.compile('牡羊座'): 'Aries',
-    re.compile('金牛座'): 'Taurus',
-    re.compile('雙子座'): 'Gemini',
-    re.compile('巨蟹座'): 'Cancer',
-    re.compile('獅子座'): 'Leo',
-    re.compile('處女座'): 'Virgo',
-    re.compile('天秤座'): 'Libra',
-    re.compile('天蠍座'): 'Scorpio',
-    re.compile('射手座'): 'Sagittarius',
-    re.compile('摩羯座'): 'Capricorn',
-    re.compile('水瓶座'): 'Aquarius',
-    re.compile('雙魚座'): 'Pisces'
+    re.compile('.*(牡|白)羊.*'): 'Aries',
+    re.compile('.*金牛.*'): 'Taurus',
+    re.compile('.*雙子.*'): 'Gemini',
+    re.compile('.*巨蟹.*'): 'Cancer',
+    re.compile('.*獅子.*'): 'Leo',
+    re.compile('.*處女.*'): 'Virgo',
+    re.compile('.*天秤.*'): 'Libra',
+    re.compile('.*天蠍.*'): 'Scorpio',
+    re.compile('.*射手.*'): 'Sagittarius',
+    re.compile('.*摩羯.*'): 'Capricorn',
+    re.compile('.*水瓶.*'): 'Aquarius',
+    re.compile('.*雙魚.*'): 'Pisces'
 }
 
 """
@@ -33,7 +33,7 @@ zodiacSigns_convert = {
     :param pattern: 正規表達式
     :return Line 訊息封裝物件
 """
-def ask_users_zodiac_sign(intent: str, pattern: re) -> QuickReply:
+def ask_users_zodiac_sign() -> QuickReply:
     quick_reply = QuickReply(items=[
         QuickReplyButton(image_url=ARIES_PICTURE, action=MessageAction(label="牡羊座今日運勢", text="牡羊座")),
         QuickReplyButton(image_url=TAURUS_PICTURE, action=MessageAction(label="金牛座今日運勢", text="金牛座")),
@@ -56,19 +56,8 @@ def ask_users_zodiac_sign(intent: str, pattern: re) -> QuickReply:
     :param pattern: 正規表達式
     :return Line 訊息封裝物件
 """
-def get_today_fortune(intent: str, pattern: re):
-    url = None
-    for pattern, sign_name in zodiacSigns_convert.items():
-        matched = pattern.match(intent)
-        if matched:
-            url = f'{SIGN_ZODIAC_URL}{sign_name}'
-
-    # 使用者輸入星座不存在，要求使用者重新輸入
-    if url is None:
-        reply_messages = [TextSendMessage(text=reply_zodiac_not_exists()),
-                          ask_users_zodiac_sign(intent='', pattern=None)]
-        return reply_messages
-
+def get_today_fortune(english_zodiac_sign):
+    url = f'{SIGN_ZODIAC_URL}{english_zodiac_sign}'
     return crawl_zodiac_sign_website(url=url)
 
 """
@@ -88,3 +77,9 @@ def crawl_zodiac_sign_website(url):
     else:
         # Http Response code 非 200，直接拋錯，回覆使用網站異常
         raise Exception
+
+"""
+    使用者輸入星座不存在，要求使用者重新輸入
+"""
+def reply_users_not_existed_sign():
+    return [TextSendMessage(text=reply_zodiac_not_exists()), ask_users_zodiac_sign()]
